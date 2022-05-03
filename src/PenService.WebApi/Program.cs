@@ -1,25 +1,44 @@
-var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+using Microsoft.AspNetCore;
+using System;
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+namespace PenService.WebApi;
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+public class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+
+        builder.Services.AddControllers();
+        builder.Services.ConfigurePackages();
+        builder.Services.ConfigureApplicationService();
+        builder.Services.ConfigureDatabase();
+        builder.Services.AddAuthentication();
+        builder.Services.AddAuthorizationCore();
+        builder.Services.AddSwaggerGen();
+
+        var app = builder.Build();
+
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+        app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+
+        app.UseEndpoints(
+            endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        app.Run();
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
