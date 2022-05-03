@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PenService.Domain.Core\PenService.Domain.Core.csproj" />
+  </ItemGroup>
+
 </Project>

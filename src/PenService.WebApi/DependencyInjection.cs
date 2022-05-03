@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using PenService.Infrastructure.EntityConfigurations;
 using PenService.Application.Behaviors;
 using PenService.Application.USAZCTAAggregate.Services;
+using PenService.Infrastructure.Repositories;
 
 namespace PenService.WebApi
 {
@@ -18,8 +19,16 @@ namespace PenService.WebApi
     {
         public static IServiceCollection ConfigurePackages(this IServiceCollection services)
         {
-            services.AddMediatR(typeof(NearByZCTAByRadius));
+            services.AddMediatR(typeof(SearchNearByZctasByRadius), typeof(Program));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+            services.AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining(typeof(SearchNearByZctasByRadiusValidator)));
+            return services;
+        }
+
+        public static IServiceCollection ConfigureApplicationService(this IServiceCollection services)
+        {
+
+            services.AddScoped<IUSAZctaService, USAZctaService>();
 
 
 
@@ -28,14 +37,9 @@ namespace PenService.WebApi
 
         }
 
-        public static IServiceCollection ConfigureApplicationService(this IServiceCollection services)
+        public static IServiceCollection ConfigureRepository(this IServiceCollection services)
         {
-
-            services.AddScoped<IUSAZCTAService, USAZCTAService>();
-
-
-
-            services.AddFluentValidation();
+            services.AddScoped<IGenericRepository, GenericRepository>();
             return services;
 
         }

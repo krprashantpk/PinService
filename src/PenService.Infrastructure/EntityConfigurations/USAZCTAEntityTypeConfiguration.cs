@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace PenService.Infrastructure.EntityConfigurations
 {
-    public class USAZCTAEntityTypeConfiguration : IEntityTypeConfiguration<USAZCTA>
+    public class USAZCTAEntityTypeConfiguration : IEntityTypeConfiguration<USAZcta>
     {
-        public void Configure(EntityTypeBuilder<USAZCTA> builder)
+        public void Configure(EntityTypeBuilder<USAZcta> builder)
         {
             builder.HasKey(x => x.Zcta);
 

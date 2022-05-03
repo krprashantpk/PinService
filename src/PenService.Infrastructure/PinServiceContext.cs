@@ -13,11 +13,11 @@ namespace PenService.Infrastructure
     {
         public PinServiceContext(DbContextOptions<PinServiceContext> options) : base(options) { }
 
-        public DbSet<USAZCTA> USAZCTAs { get; private set; }
+        public DbSet<USAZcta> USAZctas { get; private set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration<USAZCTA>(new USAZCTAEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration<USAZcta>(new USAZCTAEntityTypeConfiguration());
         }
     }
 }

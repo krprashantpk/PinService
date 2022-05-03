@@ -12,15 +12,6 @@ namespace PenService.Domain.Core.Seed
 
         List<INotification>? _events;
 
-        public BaseEntity()
-        {
-            CreatedUtcTime = DateTime.UtcNow;
-        }
-        public DateTime CreatedUtcTime { get; }
-        public DateTime LastUpdatedUtcTime { get; protected set; }
-        public long CreatedBy { get; protected set; }
-        public long LastUpdatedBy { get; protected set; }
-
         public void AddEvent(INotification @event)
         {
             if (_events == null) _events = new List<INotification>();

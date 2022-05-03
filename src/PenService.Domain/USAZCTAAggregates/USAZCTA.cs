@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PenService.Domain.Core.Seed;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,13 +7,9 @@ using System.Threading.Tasks;
 
 namespace PenService.Domain.USAZCTAAggregates
 {
-    public class USAZCTA
+    public class USAZcta : BaseEntity
     {
-        private  USAZCTA()
-        {
-
-        }
-        public USAZCTA(int zcta, double latitude, double longitude, string stateCode, string state, string county)
+        public USAZcta(int zcta, double latitude, double longitude, string stateCode, string state, string county)
         {
             Zcta = zcta;
             Latitude = latitude;

@@ -10,21 +10,19 @@ using System.Threading.Tasks;
 
 namespace PenService.WebApi.Controllers
 {
-    public class USAZCTAController : BaseController
+    public class USAZctaController : BaseController
     {
         private readonly IMediator mediator;
 
-        public USAZCTAController(IMediator mediator)
+        public USAZctaController(IMediator mediator)
         {
             this.mediator = mediator;
         }
 
-        [HttpGet]
-
-        public async Task<IActionResult> GET(int pin, int radius)
+        [HttpGet()]
+        public async Task<IActionResult> GET([FromQuery] uint Radius, string Zcta)
         {
-            var reuslt = await mediator.Send<IEnumerable<USAZCTA>>(new NearByZCTAByRadius(radius, pin));
-            return Ok(reuslt);
+            return Ok(await SendAsync<SearchNearByZctasByRadius, IEnumerable<USAZcta>>(new SearchNearByZctasByRadius(Radius, Zcta)));
         }
 
     }

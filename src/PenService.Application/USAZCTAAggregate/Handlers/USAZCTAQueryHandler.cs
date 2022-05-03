@@ -11,22 +11,21 @@ using System.Threading.Tasks;
 
 namespace PenService.Application.USAZCTAAggregate.Handlers
 {
-    public class USAZCTAQueryHandler : IRequestHandler<NearByZCTAByRadius, IEnumerable<USAZCTA>>
+    public class USAZctaQueryHandler : IRequestHandler<SearchNearByZctasByRadius, IEnumerable<USAZcta>>
     {
-        private readonly IUSAZCTAService service;
+        private readonly IUSAZctaService service;
 
-        public USAZCTAQueryHandler(IUSAZCTAService service)
+        public USAZctaQueryHandler(IUSAZctaService service)
         {
             this.service = service;
         }
-
-        public async Task<IEnumerable<USAZCTA>> Handle(NearByZCTAByRadius request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<USAZcta>> Handle(SearchNearByZctasByRadius request, CancellationToken cancellationToken)
         {
-            var result = new List<USAZCTA>();
+
+            //TODO:: Add Cache, HandleValidation for NonExistance PIN.
+            var result = new List<USAZcta>();
             var wholeZCTAs = await service.SearchAsync();
-
-            var zip1 = wholeZCTAs.First(x => x.Zcta == request.ZCTA);
-
+            var zip1 = wholeZCTAs.First(x => x.Zcta == int.Parse(request.Zcta!));
             foreach (var item in wholeZCTAs)
             {
                 var distance = HaversineFormula.Distance(zip1.Latitude, zip1.Longitude, item.Latitude, item.Longitude);
