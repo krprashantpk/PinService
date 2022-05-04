@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation.AspNetCore;
 using MediatR;
-using PenService.Application.USAZCTAAggregate.Queries;
-using FluentValidation.AspNetCore;
-using PenService.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using PenService.Infrastructure.EntityConfigurations;
 using PenService.Application.Behaviors;
+using PenService.Application.USAZCTAAggregate.Queries;
 using PenService.Application.USAZCTAAggregate.Services;
+using PenService.Domain.Core.Interfaces;
+using PenService.Infrastructure;
+using PenService.Infrastructure.EntityConfigurations;
 using PenService.Infrastructure.Repositories;
 
 namespace PenService.WebApi

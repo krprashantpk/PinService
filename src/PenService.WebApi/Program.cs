@@ -1,18 +1,20 @@
-
-using Microsoft.AspNetCore;
 using PenService.WebApi.Middlewares;
-using System;
 
 namespace PenService.WebApi;
-
 public class Program
 {
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Logging.ClearProviders();
+        builder.Logging.AddConsole();
 
-
-        builder.Services.AddControllers();
+        builder.Services.AddControllers(options =>
+        {
+            //options.RespectBrowserAcceptHeader = true;
+        })
+            //.AddXmlSerializerFormatters();
+            ;
 
         builder.Services.ConfigurePackages();
         builder.Services.ConfigureApplicationService();
@@ -22,15 +24,13 @@ public class Program
         builder.Services.AddAuthorizationCore();
         builder.Services.AddSwaggerGen();
 
-        //builder.Services.AddTransient<HandleExceptionMiddleWare>();
-
         var app = builder.Build();
 
 
         if (app.Environment.IsDevelopment())
         {
-            //app.UseDeveloperExceptionPage();
-            app.UseExceptionHandling();
+            app.UseDeveloperExceptionPage();
+            //app.UseLogging();
             app.UseSwagger();
             app.UseSwaggerUI();
         }

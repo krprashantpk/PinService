@@ -29,19 +29,15 @@ namespace PenService.Application.Behaviors
                 var errors = validators.Select(x => x.Validate(context))
                     .Where(result => result.Errors != null)
                     .SelectMany(result => result.Errors)
-                    .GroupBy(failure => failure.PropertyName, failure => failure.ErrorMessage, (key, errors) => new
-                    {
-                        PropertyName = key,
-                        ErrorMessage = errors.Distinct().ToArray()
+                    .Select(x => x.ErrorMessage)
+                    .Distinct();
 
-                    }).ToDictionary(x => x.PropertyName, x => x.ErrorMessage);
-
-
-                if(errors.Any()) throw new ValidationException("sDs");
+                if (errors != null && errors.Any()) throw new RequestValidationException<TRequest, TResponse>(Domain.Core.Seed.ErrorCode.RequestValidationFailed, errors.ToArray());
             }
-
-
-
+            else
+            {
+                logger.LogWarning($"Validator not found of the Type {typeof(TRequest).FullName}");
+            }
             return await next().ConfigureAwait(false);
         }
     }

@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PenService.Infrastructure.Repositories
+namespace PenService.Domain.Core.Interfaces
 {
     public interface IGenericRepository
     {

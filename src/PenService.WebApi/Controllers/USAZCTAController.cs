@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static PenService.Domain.Core.ResponseBuilder;
 
 namespace PenService.WebApi.Controllers
 {
@@ -20,9 +21,9 @@ namespace PenService.WebApi.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GET([FromQuery] uint Radius, string Zcta)
+        public async Task<ActionResult<PinServiceResponse<IEnumerable<USAZcta>>>> GET([FromQuery] uint Radius, string Zcta)
         {
-            return Ok(await SendAsync<SearchNearByZctasByRadius, IEnumerable<USAZcta>>(new SearchNearByZctasByRadius(Radius, Zcta)));
+            return await SendAsync<SearchNearByZctasByRadius, IEnumerable<USAZcta>>(new SearchNearByZctasByRadius(Radius, Zcta));
         }
 
     }

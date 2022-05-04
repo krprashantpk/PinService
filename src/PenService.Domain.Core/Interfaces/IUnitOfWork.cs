@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PenService.Application
+namespace PenService.Domain.Core.Interfaces
 {
-    public interface IUnitOfWork<Context>
+    public interface IUnitOfWork<Context> where Context : DbContext
     {
         DbContext DbContext { get; }
         bool IsTransactionActive { get; }

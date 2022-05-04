@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PenService.Domain.Core.Interfaces;
 using PenService.Domain.USAZCTAAggregates;
 using PenService.Infrastructure;
 using PenService.Infrastructure.Repositories;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using PenService.Domain.Core.Interfaces;
 using PenService.Infrastructure;
 using System;
 using System.Collections.Generic;

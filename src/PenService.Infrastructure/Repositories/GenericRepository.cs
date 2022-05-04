@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using PenService.Domain.Core.Interfaces;
 using PenService.Domain.Core.Seed;
 using System;
 using System.Collections.Generic;
@@ -12,10 +14,12 @@ namespace PenService.Infrastructure.Repositories
     public class GenericRepository : IGenericRepository
     {
         private readonly PinServiceContext context;
+        private readonly ILogger<GenericRepository> logger;
 
-        public GenericRepository(PinServiceContext context)
+        public GenericRepository(PinServiceContext context, ILogger<GenericRepository> logger)
         {
             this.context = context;
+            this.logger = logger;
         }
         public async Task AddAsync<TEntity>(TEntity entity) where TEntity : BaseEntity
         {
@@ -28,7 +32,7 @@ namespace PenService.Infrastructure.Repositories
         }
         public async Task<TEntity> FindAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : BaseEntity
         {
-            if(predicate == null) throw new ArgumentNullException(nameof(predicate));
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
             return await context.Set<TEntity>().FirstAsync(predicate);
 
         }

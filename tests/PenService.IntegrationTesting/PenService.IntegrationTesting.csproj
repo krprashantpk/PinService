@@ -20,9 +20,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PenService.Distance\PenService.Distance.csproj" />
-    <ProjectReference Include="..\PenService.Domain.Core\PenService.Domain.Core.csproj" />
-  </ItemGroup>
-
 </Project>

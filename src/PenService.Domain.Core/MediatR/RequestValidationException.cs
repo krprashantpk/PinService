@@ -8,19 +8,28 @@ using System.Threading.Tasks;
 
 namespace PenService.Domain.Core.MediatR
 {
-    public class RequestValidationException<TRequest, TResponse> : BaseException where TRequest : IRequest<TResponse>
+
+    public abstract class RequestValidationException : BaseException
     {
-        public Dictionary<string, string[]> ErrorMessages { get; private set; }
+        public abstract string[] Errors { get;  }
 
-        public RequestValidationException(ErrorCode errorCode, KeyValuePair<string, string[]>[] errors) : base(errorCode, $" Validation failed for the request {typeof(TRequest).FullName}.")
+        protected RequestValidationException(ErrorCode errorCode, string message) : base(errorCode, message)
         {
-            ErrorMessages = new Dictionary<string, string[]>();
-            
-        }
 
-        public RequestValidationException(ErrorCode errorCode, Exception? innerException) : base(errorCode, $" Validation failed for the request {typeof(TRequest).FullName}.", innerException)
-        {
-            ErrorMessages = new Dictionary<string, string[]>();
         }
+    }
+
+
+
+    public class RequestValidationException<TRequest, TResponse> : RequestValidationException where TRequest : IRequest<TResponse>
+    {
+        private string[]? _errors;
+        public RequestValidationException(ErrorCode errorCode, string[] errors) : base(errorCode, $" Validation failed for the request {typeof(TRequest).FullName}.")
+        {
+            if (errors == null || !errors.Any()) throw new ArgumentNullException(nameof(errors));
+            _errors = errors;
+
+        }
+        public override string[] Errors => _errors!;
     }
 }
