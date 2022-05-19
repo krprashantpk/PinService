@@ -4,7 +4,7 @@ using PinService.Domain.Core.Interfaces;
 
 namespace PinService.Application
 {
-    public class UnitOfWork<Context> : IUnitOfWork<Context> where Context : DbContext
+    class UnitOfWork<Context> : IUnitOfWork<Context> where Context : DbContext
     {
         private readonly DbContext dbContext;
         private IDbContextTransaction? _transaction;

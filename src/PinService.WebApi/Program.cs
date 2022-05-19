@@ -1,6 +1,10 @@
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using PinService.Application;
+using PinService.Cache;
+using PinService.Infrastructure;
+
 namespace PinService.WebApi;
 
 public class Program
@@ -11,16 +15,16 @@ public class Program
 
         builder.Services.AddControllers();
 
-        builder.Services.ConfigurePackages();
-        builder.Services.ConfigureApplicationService();
-        builder.Services.ConfigureRepository();
-        builder.Services.ConfigureDatabase(builder.Configuration);
+        builder.Services
+        .AddApplicationServices()
+        .AddPersistance(builder.Configuration)
+        .AddCacheServices(builder.Configuration);
+
         builder.Services.ConfigureHealthChecks(builder.Configuration);
 
         builder.Services.AddAuthentication();
         builder.Services.AddAuthorizationCore();
         builder.Services.AddSwaggerGen();
-        builder.Services.AddMemoryCache();
 
         var app = builder.Build();
 

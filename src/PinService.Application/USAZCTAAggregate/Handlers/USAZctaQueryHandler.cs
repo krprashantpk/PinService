@@ -14,36 +14,20 @@ namespace PinService.Application.USAZCTAAggregate.Handlers
     {
         private readonly IGenericRepository repository;
         private readonly IMapper mapper;
-        private readonly ICacheService cache;
         private readonly ILogger<USAZctaQueryHandler> logger;
 
         public USAZctaQueryHandler(
             IGenericRepository repository,
             IMapper mapper,
-            ICacheService cache,
             ILogger<USAZctaQueryHandler> logger)
         {
             this.repository = repository;
             this.mapper = mapper;
-            this.cache = cache;
             this.logger = logger;
         }
         public async Task<IEnumerable<USAZctaDto>> Handle(SearchNearByZctasByRadius request, CancellationToken cancellationToken)
         {
-            List<USAZcta> result = new List<USAZcta>();
-
-            var resultCacheKey = USAZctaCacheKey.ZctaKey(int.Parse(request.Zcta)!, request.Radius);
-
-            if (cache.TryGetValue<List<USAZcta>>(resultCacheKey, out result))
-            {
-                return mapper.Map<IEnumerable<USAZcta>, IEnumerable<USAZctaDto>>(result);
-            }
-
-            var wholeZCTAs = await cache.CreateOrGetValueAsync<IEnumerable<USAZcta>>(USAZctaCacheKey.USAZCTA, async () =>
-            {
-                return await repository.SearchAsync<USAZcta>();
-
-            });
+            var wholeZCTAs = await repository.SearchAsync<USAZcta>();
 
             var zip1 = wholeZCTAs!.FirstOrDefault(x => x.Zcta == int.Parse(request.Zcta)!);
 
@@ -54,17 +38,10 @@ namespace PinService.Application.USAZCTAAggregate.Handlers
                 throw new RequestValidationException<SearchNearByZctasByRadius, IEnumerable<USAZctaDto>>(Domain.Core.Seed.ErrorCode.RequestValidationFailed, error);
             }
 
-            result = await cache.SetValueAsync(resultCacheKey, async () =>
-            {
-                if (result == null) result = new List<USAZcta>();
-                foreach (var item in wholeZCTAs!)
-                {
-                    var distance = HaversineFormula.Distance(zip1.Latitude, zip1.Longitude, item.Latitude, item.Longitude);
-                    if (distance <= request.Radius) result.Add(item);
-                }
-                return await Task.FromResult(result);
-
-            });
+            var result = wholeZCTAs.Where(
+                item =>
+                HaversineFormula.Distance(zip1.Latitude, zip1.Longitude, item.Latitude, item.Longitude) <= request.Radius
+                );
 
             return mapper.Map<IEnumerable<USAZcta>, IEnumerable<USAZctaDto>>(result);
         }
